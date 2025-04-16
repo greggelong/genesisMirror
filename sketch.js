@@ -1,8 +1,10 @@
 let myvideo;
-let vScale = 10; // this will get set dynamically
-let cols = 45; // number of columns you want
+let vScale;
+let cols = 45;
+let rows;
 let gw, ws;
-let convolverNode;
+let workerTiles = [];
+let cnv;
 
 function preload() {
   gw = loadImage("gw.png");
@@ -17,17 +19,29 @@ function setup() {
   pixelDensity(1);
 
   vScale = floor(width / cols);
-  let rows = floor(height / vScale);
+  rows = floor(height / vScale);
 
   myvideo = createCapture(VIDEO);
   myvideo.size(cols, rows);
   myvideo.hide();
   noStroke();
 
-  //gw.resize(vScale, 0);
-  ws.resize(cnv.width, 0);
+  ws.resize(width, 0);
+  makeWorkerTiles();
 
   frameRate(5);
+}
+
+function makeWorkerTiles() {
+  workerTiles = [];
+  for (let y = 0; y < height; y += vScale) {
+    let row = [];
+    for (let x = 0; x < width; x += vScale) {
+      let tile = ws.get(x, y, vScale, vScale);
+      row.push(tile);
+    }
+    workerTiles.push(row);
+  }
 }
 
 function draw() {
@@ -37,20 +51,14 @@ function draw() {
 
   for (let y = 0; y < myvideo.height; y++) {
     for (let x = 0; x < myvideo.width; x++) {
-      // mirror index
       let index = (myvideo.width - x - 1 + y * myvideo.width) * 4;
       let r = myvideo.pixels[index + 0];
       let g = myvideo.pixels[index + 1];
       let b = myvideo.pixels[index + 2];
       let bright = floor((r + g + b) / 3);
 
-      if (bright < 128) {
-        //fill(255, 255, 0, 0); // fill with transparent
-        //rect(x * vScale, y * vScale, vScale, vScale);
-      } else {
-        noFill();
-        let workerimg = ws.get(x * vScale, y * vScale, vScale, vScale);
-        image(workerimg, x * vScale, y * vScale);
+      if (bright >= 128 && workerTiles[y] && workerTiles[y][x]) {
+        image(workerTiles[y][x], x * vScale, y * vScale);
       }
     }
   }
