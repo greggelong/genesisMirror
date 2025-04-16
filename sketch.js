@@ -22,12 +22,12 @@ function setup() {
   myvideo = createCapture(VIDEO);
   myvideo.size(cols, rows);
   myvideo.hide();
-  stroke(0);
+  noStroke();
 
   //gw.resize(vScale, 0);
   ws.resize(cnv.width, 0);
 
-  //frameRate(5);
+  frameRate(5);
 }
 
 function draw() {
@@ -44,15 +44,13 @@ function draw() {
       let b = myvideo.pixels[index + 2];
       let bright = floor((r + g + b) / 3);
 
-      if (bright > 128) {
-        fill(255, 255, 0, 0); // fill with transparent
-        rect(x * vScale, y * vScale, vScale, vScale);
+      if (bright < 128) {
+        //fill(255, 255, 0, 0); // fill with transparent
+        //rect(x * vScale, y * vScale, vScale, vScale);
       } else {
         noFill();
         let workerimg = ws.get(x * vScale, y * vScale, vScale, vScale);
         image(workerimg, x * vScale, y * vScale);
-
-        rect(x * vScale, y * vScale, vScale, vScale);
       }
     }
   }
