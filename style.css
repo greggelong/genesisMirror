@@ -2,6 +2,9 @@
 html, body {
     margin: 0;
     padding: 0;
+    /* Hides overflow on the x-axis and y-axis */
+    overflow: hidden;
+        
   }
   canvas {
     display: block;
