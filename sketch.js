@@ -10,7 +10,7 @@ function preload() {
 }
 
 function setup() {
-  cnv = createCanvas(900, 900);
+  cnv = createCanvas(800, 800);
   let cx = (windowWidth - cnv.width) / 2;
   let cy = (windowHeight - cnv.height) / 2;
   cnv.position(cx, cy);
