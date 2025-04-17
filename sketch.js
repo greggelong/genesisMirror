@@ -57,7 +57,7 @@ function draw() {
       let b = myvideo.pixels[index + 2];
       let bright = floor((r + g + b) / 3);
 
-      if (bright <= 128 && workerTiles[y] && workerTiles[y][x]) {
+      if (bright >= 128 && workerTiles[y] && workerTiles[y][x]) {
         image(workerTiles[y][x], x * vScale, y * vScale);
       }
     }
